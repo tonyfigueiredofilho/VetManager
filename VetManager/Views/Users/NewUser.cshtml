@@ -1,0 +1,64 @@
+﻿
+@{
+    ViewBag.Title = "NewUser";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<script src="/Scripts/jquery.cookie.js"></script>
+<script>
+    $(function () { //Chamada JQuery
+        //Ação do botão entrar do Login
+        $('#bt_Enviar').click(function (e) {
+
+            //Objeto de envio para o controller
+            var form = {};
+            form.UserName = $("#Username").val();
+            form.Senha = $("#Senha").val();
+            form.FirstName = $("#Nome").val();
+            form.LastName = $("#SobreNome").val();
+            form.Email = $("#Email").val();
+            form.BirthDate = $("#DataNascimento").val();
+
+            // Chamada via JavaScript ao controller via URL
+            $.ajax({
+                url: "/Users/NewUser", //Nome do controller
+                type: "POST", // Tipo de envio Post ou Get, Post é via HTTP e Get via URL String
+                data: JSON.stringify(form), //Transforma o objeto javascript em JSON
+                contentType: "application/json; charset=utf-8", //Tipo do conteúdo de envio
+                dataType: "json", //Tipo do Retorno
+                error: function (response) //Chamada de erro
+                {
+                    alert(response.responseText); //aleeta com o texto do erro
+                },
+                success: function (response) {
+                    //alert(response.Nome + ", Login realizado com sucesso");
+                    //localStorage.setItem('nome', response.UserName);
+                    $.cookie('username', response.UserName)
+                    var url = "/Users";
+                    window.location.href = url;
+                }
+            });
+
+        });
+        //Ação do botão Esqueci Minha Senha
+    });
+</script>
+
+<h2>Cadastro de Usuário</h2>
+
+<div>Nome do Usuário:</div>
+<div><input id="Username" name="username" /></div>
+<div>Senha: </div>
+<div><input id="Senha" name="senha" type="password" /></div>
+<div>Nome: </div>
+<div><input id="Nome" name="nome" /></div>
+<div>Sobrenome: </div>
+<div><input id="SobreNome" name="sobrenome" /></div>
+<div>E-mail: </div>
+<div><input id="Email" name="email" /></div>
+<div>Data de Nascimento: </div>
+<div><input id="DataNascimento" name="datanascimento" type="date" /></div>
+
+<div><button id="bt_Enviar" name="bt_Enviar">Enviar</button></div>
+
+

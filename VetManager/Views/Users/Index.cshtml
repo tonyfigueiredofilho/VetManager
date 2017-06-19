@@ -1,0 +1,44 @@
+﻿
+@{
+    ViewBag.Title = "Informações do Usuário";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Informações do Usuário</h2>
+<div id="UserName" name="username"></div>
+<div id="Nome" name="nome"></div>
+<div id="Sobrenome" name="sobrenome"></div>
+<div id="DataNascimento" name="datanascimento"></div>
+<div id="Email" name="email"></div>
+
+<script src="/Scripts/jquery.cookie.js"></script>
+<script>
+    $(function () {
+        var form = {};
+        form.UserName = $.cookie('username');
+        $.ajax({
+            url: "/Users/GetDados",
+            type: "POST", // Tipo de envio Post ou Get, Post é via HTTP e Get via URL String
+            data: JSON.stringify(form), //Transforma o objeto javascript em JSON
+            contentType: "application/json; charset=utf-8", //Tipo do conteúdo de envio
+            dataType: "json", //Tipo do Retorno
+            success: function (response) {
+                $("#UserName").html("<b>Nome do Usuário:</b> " + response.UserName);
+                $("#Nome").html("<b>Nome:</b> " + response.FirstName);
+                $("#Sobrenome").html("<b>Sobrenome:</b> " + response.LastName);
+                $("#DataNascimento").html("<b>Data de Nascimento:</b> " + response.BirthDate);
+                $("#Email").html("<b>E-mail:</b> " + response.Email);
+            },
+            error: function (response) {
+                alert("Erro ao recuperar usuário: " + response.FirstName);
+            }
+        });
+    });
+</script>
+
+
+
+
+
+
+

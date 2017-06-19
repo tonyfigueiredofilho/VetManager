@@ -1,0 +1,52 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<script src="/Scripts/jquery.cookie.js"></script>
+<script>
+    $(function () { //Chamada JQuery
+        //Ação do botão entrar do Login
+        $('#bt_Entrar').click(function (e) {
+
+            //Objeto de envio para o controller
+            var form = {};
+            form.UserName = $("#Username").val();
+            form.Senha = $("#Senha").val();
+
+            // Chamada via JavaScript ao controller via URL
+            $.ajax({
+                url: "/Logon/Entrar", //Nome do controller
+                type: "POST", // Tipo de envio Post ou Get, Post é via HTTP e Get via URL String
+                data: JSON.stringify(form), //Transforma o objeto javascript em JSON
+                contentType: "application/json; charset=utf-8", //Tipo do conteúdo de envio
+                dataType: "json", //Tipo do Retorno
+                error: function (response) //Chamada de erro
+                {
+                    alert(response.responseText); //aleeta com o texto do erro
+                },
+                success: function (response) {
+                    //alert(response.Nome + ", Login realizado com sucesso");
+                    //localStorage.setItem('nome', response.UserName);
+                    $.cookie('username', response.UserName)
+                    var url = "/Users";
+                    window.location.href = url;
+                }
+            });
+           
+        });
+        //Ação do botão Esqueci Minha Senha
+    });
+</script>
+
+<h2>Logon</h2>
+
+<div>Nome do Usuário:</div>
+<div><input id="Username" name="username" /></div>
+<div>Senha: </div>
+<div><input id="Senha" name="senha" type="password"/></div>
+<div><button id="bt_Entrar" name="bt_Entrar">Entrar</button></div>
+<div><a href="/Login/ForgotPassword"> Esqueci Minha Senha!</a></div>
+<div><a href="/Users/NewUser"> Criar conta</a></div>
+
